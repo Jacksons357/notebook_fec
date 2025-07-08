@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -58,12 +58,13 @@ jobs:
 
     services:
       mysql:
-        image: mysql
+        image: mysql:8.0
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: notebook_test
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mysqladmin ping -h localhost -u root -padmin" --health-interval=10s --health-timeout=5s --health-retries=3
 
       # redis:
       #   image: redis
@@ -84,10 +85,17 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Wait for MySQL to be ready
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"3306" -u"root" -p"admin" --silent; do
+            sleep 1
+          done
+
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: mysql2://127.0.0.1:3306
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test test:system
 
