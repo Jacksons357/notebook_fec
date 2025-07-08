@@ -4,13 +4,13 @@ RSpec.describe Notebook, type: :model do
   subject { build(:notebook) }
 
   describe 'validations' do
-    it { should validate_presence_of(:marca) }
-    it { should validate_presence_of(:modelo) }
-    it { should validate_presence_of(:numero_patrimonio) }
-    it { should validate_presence_of(:numero_serie) }
-    it { should validate_presence_of(:identificacao_equipamento) }
-    it { should validate_presence_of(:data_compra) }
-    it { should validate_presence_of(:estado) }
+    it { should validate_presence_of(:marca).with_message("é obrigatória") }
+    it { should validate_presence_of(:modelo).with_message("é obrigatório") }
+    it { should validate_presence_of(:numero_patrimonio).with_message("é obrigatório") }
+    it { should validate_presence_of(:numero_serie).with_message("é obrigatório") }
+    it { should validate_presence_of(:identificacao_equipamento).with_message("é obrigatória") }
+    it { should validate_presence_of(:data_compra).with_message("é obrigatória") }
+    it { should validate_presence_of(:estado).with_message("é obrigatório") }
 
     it { should validate_uniqueness_of(:numero_patrimonio).case_insensitive }
     it { should validate_uniqueness_of(:numero_serie).case_insensitive }
