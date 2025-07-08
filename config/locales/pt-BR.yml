@@ -1,0 +1,82 @@
+pt-BR:
+  errors:
+    template:
+      header:
+        one: "Não foi possível salvar este %{model}: 1 erro"
+        other: "Não foi possível salvar este %{model}: %{count} erros"
+      body: "Por favor, verifique os seguintes campos:"
+    messages:
+      accepted: "deve ser aceito"
+      blank: "não pode ficar em branco"
+      confirmation: "não confere com a confirmação"
+      empty: "não pode ficar vazio"
+      equal_to: "deve ser igual a %{count}"
+      even: "deve ser par"
+      exclusion: "está reservado"
+      greater_than: "deve ser maior que %{count}"
+      greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+      inclusion: "não está incluído na lista"
+      invalid: "não é válido"
+      less_than: "deve ser menor que %{count}"
+      less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+      model_invalid: "Erro de validação: %{errors}"
+      not_a_number: "não é um número"
+      not_an_integer: "deve ser um número inteiro"
+      odd: "deve ser ímpar"
+      other_than: "deve ser diferente de %{count}"
+      present: "deve estar em branco"
+      required: "deve existir"
+      taken: "já está em uso"
+      too_long: "é muito longo (máximo: %{count} caracteres)"
+      too_short: "é muito curto (mínimo: %{count} caracteres)"
+      wrong_length: "não possui o tamanho esperado (%{count} caracteres)"
+      not_a_file: "deve ser um arquivo"
+      content_type_invalid: "tipo de conteúdo inválido"
+      file_size_out_of_range: "tamanho do arquivo deve estar entre %{min_size} e %{max_size}"
+
+  helpers:
+    select:
+      prompt: "Selecione uma opção"
+    submit:
+      create: "Criar %{model}"
+      update: "Atualizar %{model}"
+      submit: "Salvar %{model}"
+
+  number:
+    currency:
+      format:
+        unit: "R$"
+        precision: 2
+        separator: ","
+        delimiter: "."
+        format: "%u %n"
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m %H:%M"
+      long: "%d de %B de %Y às %H:%M"
+    day_names: [Domingo, Segunda, Terça, Quarta, Quinta, Sexta, Sábado]
+    abbr_day_names: [Dom, Seg, Ter, Qua, Qui, Sex, Sáb]
+    month_names:
+      [
+        ~,
+        Janeiro,
+        Fevereiro,
+        Março,
+        Abril,
+        Maio,
+        Junho,
+        Julho,
+        Agosto,
+        Setembro,
+        Outubro,
+        Novembro,
+        Dezembro,
+      ]
+    abbr_month_names:
+      [~, Jan, Fev, Mar, Abr, Mai, Jun, Jul, Ago, Set, Out, Nov, Dez]
+    order:
+      - :day
+      - :month
+      - :year

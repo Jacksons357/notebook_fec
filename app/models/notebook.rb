@@ -8,13 +8,13 @@ class Notebook < ApplicationRecord
   has_one_attached :nota_fiscal_pdf
   
   # Validations
-  validates :marca, presence: true
-  validates :modelo, presence: true
-  validates :numero_patrimonio, presence: true, uniqueness: true
-  validates :numero_serie, presence: true, uniqueness: true
-  validates :identificacao_equipamento, presence: true, uniqueness: true
-  validates :data_compra, presence: true
-  validates :estado, presence: true
+  validates :marca, presence: { message: "é obrigatória" }
+  validates :modelo, presence: { message: "é obrigatório" }
+  validates :numero_patrimonio, presence: { message: "é obrigatório" }, uniqueness: { message: "já está em uso" }
+  validates :numero_serie, presence: { message: "é obrigatório" }, uniqueness: { message: "já está em uso" }
+  validates :identificacao_equipamento, presence: { message: "é obrigatória" }, uniqueness: { message: "já está em uso" }
+  validates :data_compra, presence: { message: "é obrigatória" }
+  validates :estado, presence: { message: "é obrigatório" }
   validate :nota_fiscal_pdf_deve_ser_pdf
   
   # Callbacks
