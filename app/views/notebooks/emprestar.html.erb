@@ -90,7 +90,7 @@
             <%= form.text_field :nome_colaborador, 
                 required: true, 
                 placeholder: "Ex: João Silva Santos",
-                class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
+                class: "mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-2 border-gray-300 rounded-md font-mono",
                 title: "Digite o nome completo do colaborador" %>
             <p class="mt-1 text-xs text-gray-500">Nome completo do colaborador que receberá o notebook</p>
           </div>
@@ -107,7 +107,7 @@
             <%= form.text_field :setor, 
                 required: true, 
                 placeholder: "Ex: TI, RH, Financeiro, Marketing",
-                class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
+                class: "mt-1 p-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-2 border-gray-300 rounded-md font-mono",
                 title: "Digite o setor ou departamento do colaborador" %>
             <p class="mt-1 text-xs text-gray-500">Setor ou departamento onde o colaborador trabalha</p>
           </div>
@@ -151,7 +151,7 @@
               Cancelar
             <% end %>
             <%= form.submit "Confirmar Empréstimo", 
-                class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105",
+                class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors hover:cursor-pointer",
                 title: "Confirmar o empréstimo do notebook" do %>
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
