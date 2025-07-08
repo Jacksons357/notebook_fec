@@ -100,8 +100,9 @@
     </div>
 
     <!-- Search and Filters -->
-    <div class="bg-white shadow rounded-lg p-6 mb-6">
-      <%= form_with url: notebooks_path, method: :get, local: true, id: "filters-form" do |form| %>
+    <div class="bg-white shadow rounded-lg p-6 mb-6" data-controller="filters" data-filters-submit-url-value="<%= notebooks_path %>">
+      
+      <%= form_with url: notebooks_path, method: :get, local: true, id: "filters-form", data: { turbo: false, filters_target: "form" } do |form| %>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
           <!-- Search -->
           <div class="lg:col-span-2">
@@ -115,7 +116,8 @@
                   value: params[:query],
                   placeholder: "Buscar por ID, patrimônio, série, colaborador, setor...", 
                   class: "block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500",
-                  title: "Digite para buscar notebooks por qualquer informação" %>
+                  title: "Digite para buscar notebooks por qualquer informação",
+                  data: { filters_target: "search" } %>
               <div class="absolute inset-y-0 right-0 flex items-center">
                 <button type="submit" class="p-1 focus:outline-none focus:shadow-outline text-gray-400 hover:text-gray-600">
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,14 +139,15 @@
                 ], params[:estado]), 
                 {}, 
                 class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white",
-                title: "Filtrar por estado do equipamento" %>
+                title: "Filtrar por estado do equipamento",
+                data: { filters_target: "status" } %>
           </div>
 
           <!-- Clear Filters -->
           <% if params[:estado].present? || params[:query].present? %>
             <div>
               <button type="button" 
-                  id="clear-filters-btn"
+                  data-filters-target="clearButton"
                   class="w-full inline-flex justify-center items-center px-3 py-2.5 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -306,70 +309,4 @@
   </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('filters-form');
-    const statusSelect = document.querySelector('select[name="estado"]');
-    const searchField = document.querySelector('input[name="query"]');
-    const searchButton = document.querySelector('button[type="submit"]');
-    const clearFiltersBtn = document.getElementById('clear-filters-btn');
-    let searchTimeout;
-    let isSubmitting = false;
-    
-    // Prevent multiple submissions
-    function safeSubmit() {
-      if (isSubmitting) return;
-      isSubmitting = true;
-      form.submit();
-      setTimeout(() => { isSubmitting = false; }, 1000);
-    }
-    
-    // Clear filters button - reload page completely
-    if (clearFiltersBtn) {
-      clearFiltersBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        // Force a complete page reload to go to the initial state
-        window.location.href = '<%= notebooks_path %>';
-      });
-    }
-    
-    // Auto-submit form when status filter changes
-    if (statusSelect) {
-      statusSelect.addEventListener('change', function() {
-        // Clear search field when status changes
-        if (searchField) {
-          searchField.value = '';
-        }
-        safeSubmit();
-      });
-    }
-    
-    // Auto-submit form when search field changes (with debounce)
-    if (searchField) {
-      searchField.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          safeSubmit();
-        }, 500); // Wait 500ms after user stops typing
-      });
-    }
-    
-    // Manual search button
-    if (searchButton) {
-      searchButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        safeSubmit();
-      });
-    }
-    
-    // Handle Enter key in search field
-    if (searchField) {
-      searchField.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          safeSubmit();
-        }
-      });
-    }
-  });
-</script>
+<!-- Filters are now handled by Stimulus controller -->

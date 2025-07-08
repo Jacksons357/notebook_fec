@@ -2,6 +2,14 @@ class NotebooksController < ApplicationController
   before_action :set_notebook, only: [:show, :edit, :update, :destroy, :emprestar, :devolver, :baixar]
 
   def index
+    # Prevent caching to ensure filters work correctly
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    
+    # Log filter parameters for debugging
+    Rails.logger.info "Filter params: query=#{params[:query]}, estado=#{params[:estado]}"
+    
     @notebooks = Notebook.includes(:emprestimos)
                         .order(Arel.sql("CASE estado 
                                         WHEN 0 THEN 1 
@@ -11,13 +19,19 @@ class NotebooksController < ApplicationController
     
     # Apply search filter if query is present and not blank
     if params[:query].present? && params[:query].strip.present?
-      @notebooks = @notebooks.buscar(params[:query].strip)
+      query = params[:query].strip
+      Rails.logger.info "Applying search filter: #{query}"
+      @notebooks = @notebooks.buscar(query)
     end
     
     # Apply status filter if estado is present and not blank
     if params[:estado].present? && params[:estado].strip.present?
-      @notebooks = @notebooks.where(estado: params[:estado].strip)
+      estado = params[:estado].strip
+      Rails.logger.info "Applying status filter: #{estado}"
+      @notebooks = @notebooks.where(estado: estado)
     end
+    
+    Rails.logger.info "Final notebooks count: #{@notebooks.count}"
   end
 
   def show
