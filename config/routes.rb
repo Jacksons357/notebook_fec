@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       post :devolver
       get :baixar
       post :baixar
+      get :download_pdf
     end
   end
 end

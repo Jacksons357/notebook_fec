@@ -1,5 +1,5 @@
 class NotebooksController < ApplicationController
-  before_action :set_notebook, only: [:show, :edit, :update, :destroy, :emprestar, :devolver, :baixar]
+  before_action :set_notebook, only: [:show, :edit, :update, :destroy, :emprestar, :devolver, :baixar, :download_pdf]
 
   def index
     # Prevent caching to ensure filters work correctly
@@ -107,6 +107,17 @@ class NotebooksController < ApplicationController
       else
         redirect_to @notebook, alert: 'Não foi possível baixar o notebook.'
       end
+    end
+  end
+
+  def download_pdf
+    if @notebook.nota_fiscal_pdf.attached?
+      send_data @notebook.nota_fiscal_pdf.download,
+                filename: @notebook.nota_fiscal_pdf.filename.to_s,
+                type: @notebook.nota_fiscal_pdf.content_type,
+                disposition: 'attachment'
+    else
+      redirect_to @notebook, alert: 'Nenhum arquivo PDF anexado a este notebook.'
     end
   end
 
