@@ -99,16 +99,16 @@ RSpec.describe 'Notebooks', type: :system do
 
     it 'permite editar um notebook' do
       notebook = Notebook.create!(valid_notebook_attributes)
-      
+
       visit notebook_path(notebook)
       click_link 'Editar'
-      
+
       expect(page).to have_content('Editar Notebook')
-      
+
       fill_in 'Marca', with: 'HP'
       fill_in 'Modelo', with: 'EliteBook 840'
       click_button 'Atualizar Notebook', match: :first
-      
+
       expect(page).to have_content('Notebook atualizado com sucesso!')
       expect(page).to have_content('HP')
       expect(page).to have_content('EliteBook 840')
@@ -116,20 +116,20 @@ RSpec.describe 'Notebooks', type: :system do
 
     it 'permite excluir notebook disponível e nunca emprestado' do
       notebook = Notebook.create!(valid_notebook_attributes)
-      
+
       visit notebook_path(notebook)
-      
+
       # Verificar se o botão de excluir está disponível
       expect(page).to have_content('Excluir')
-      
+
       # Clicar no botão de excluir para abrir o modal
       click_button 'Excluir', match: :first
-      
+
       # Confirmar exclusão no modal
       within('#deleteModal') do
         click_button 'Excluir'
       end
-      
+
       expect(page).to have_content('Notebook excluído com sucesso!')
       expect(page).not_to have_content(notebook.identificacao_equipamento)
     end
@@ -137,9 +137,9 @@ RSpec.describe 'Notebooks', type: :system do
     it 'não permite excluir notebook emprestado' do
       notebook = Notebook.create!(valid_notebook_attributes)
       notebook.emprestar!('João Silva', 'TI')
-      
+
       visit notebook_path(notebook)
-      
+
       # Verificar que não há botão de excluir ou que há mensagem de erro
       expect(page).to have_content('Emprestado')
       expect(page).not_to have_content('Excluir')
@@ -154,20 +154,20 @@ RSpec.describe 'Notebooks', type: :system do
         numero_serie: 'SN123457'
       ))
       notebook_emprestado.emprestar!('João Silva', 'TI')
-      
+
       visit root_path
-      
+
       # Filtrar por disponível
       select 'Disponível', from: 'estado'
       find('button[type="submit"]').click
-      
+
       expect(page).to have_content(notebook_disponivel.identificacao_equipamento)
       expect(page).not_to have_content(notebook_emprestado.identificacao_equipamento)
-      
+
       # Filtrar por emprestado
       select 'Emprestado', from: 'estado'
       find('button[type="submit"]').click
-      
+
       expect(page).to have_content(notebook_emprestado.identificacao_equipamento)
       expect(page).not_to have_content(notebook_disponivel.identificacao_equipamento)
     end
@@ -181,9 +181,9 @@ RSpec.describe 'Notebooks', type: :system do
         numero_serie: 'SN123457'
       ))
       notebook_emprestado.emprestar!('João Silva', 'TI')
-      
+
       visit root_path
-      
+
       # Verificar estatísticas
       expect(page).to have_content('Disponíveis')
       expect(page).to have_content('Emprestados')
@@ -191,4 +191,4 @@ RSpec.describe 'Notebooks', type: :system do
       expect(page).to have_content('Total')
     end
   end
-end 
+end

@@ -68,7 +68,7 @@ RSpec.describe Notebook, type: :model do
       it 'creates initial status history' do
         notebook = build(:notebook)
         expect { notebook.save! }.to change(HistoricoStatusNotebook, :count).by(1)
-        
+
         history = notebook.historico_status_notebooks.last
         expect(history.estado).to eq('disponivel')
         expect(history.informacoes_adicionais).to eq('Notebook cadastrado no sistema')
@@ -79,7 +79,7 @@ RSpec.describe Notebook, type: :model do
       it 'creates status history when estado changes' do
         notebook = create(:notebook)
         expect { notebook.update!(estado: :emprestado) }.to change(HistoricoStatusNotebook, :count).by(1)
-        
+
         history = notebook.historico_status_notebooks.last
         expect(history.estado).to eq('emprestado')
       end

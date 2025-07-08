@@ -18,4 +18,4 @@ class CreateNotebooks < ActiveRecord::Migration[8.0]
     add_index :notebooks, :numero_patrimonio, unique: true
     add_index :notebooks, :estado
   end
-end 
+end

@@ -10,8 +10,8 @@ class CreateEmprestimos < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    add_index :emprestimos, [:notebook_id, :data_emprestimo]
+    add_index :emprestimos, [ :notebook_id, :data_emprestimo ]
     add_index :emprestimos, :nome_colaborador
     add_index :emprestimos, :setor
   end
-end 
+end

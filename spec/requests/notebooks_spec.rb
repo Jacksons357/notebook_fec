@@ -122,4 +122,4 @@ RSpec.describe "Notebooks", type: :request do
       expect(response.body).to include("BUSCA01")
     end
   end
-end 
+end

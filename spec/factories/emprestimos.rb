@@ -15,4 +15,4 @@ FactoryBot.define do
       motivo_devolucao { "Equipamento devolvido por #{Faker::Lorem.word}" }
     end
   end
-end 
+end

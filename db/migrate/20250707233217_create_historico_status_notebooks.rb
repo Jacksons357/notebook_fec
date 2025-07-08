@@ -8,6 +8,6 @@ class CreateHistoricoStatusNotebooks < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    add_index :historico_status_notebooks, [:notebook_id, :data_alteracao]
+    add_index :historico_status_notebooks, [ :notebook_id, :data_alteracao ]
   end
-end 
+end

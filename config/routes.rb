@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "notebooks#index"
-  
+
   # Notebook routes
   resources :notebooks do
     member do

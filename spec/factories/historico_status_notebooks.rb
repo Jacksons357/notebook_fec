@@ -20,4 +20,4 @@ FactoryBot.define do
       informacoes_adicionais { "Notebook devolvido" }
     end
   end
-end 
+end
