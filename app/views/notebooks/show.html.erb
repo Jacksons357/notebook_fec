@@ -1,0 +1,467 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex justify-between items-start">
+        <div class="flex-1">
+          <nav class="flex mb-4" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-4">
+              <li>
+                <%= link_to notebooks_path, class: "text-gray-400 hover:text-gray-500 transition-colors" do %>
+                  <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                  </svg>
+                <% end %>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="ml-4 text-sm font-medium text-gray-500">Detalhes do Notebook</span>
+                </div>
+              </li>
+            </ol>
+          </nav>
+          
+          <div class="flex items-center space-x-4">
+            <div class="h-16 w-16 rounded-lg bg-indigo-100 flex items-center justify-center">
+              <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900"><%= @notebook.identificacao_equipamento %></h1>
+              <p class="mt-1 text-lg text-gray-600"><%= @notebook.marca %> <%= @notebook.modelo %></p>
+              <div class="mt-2 flex items-center space-x-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                  <%= case @notebook.estado
+                      when 'disponivel'
+                        'bg-green-100 text-green-800'
+                      when 'emprestado'
+                        'bg-yellow-100 text-yellow-800'
+                      when 'indisponivel'
+                        'bg-red-100 text-red-800'
+                      end %>">
+                  <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  <%= case @notebook.estado
+                      when 'disponivel'
+                        'Disponível'
+                      when 'emprestado'
+                        'Emprestado'
+                      when 'indisponivel'
+                        'Indisponível'
+                      end %>
+                </span>
+                <span class="text-sm text-gray-500">
+                  <svg class="h-4 w-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  Patrimônio: <span class="font-mono font-medium"><%= @notebook.numero_patrimonio %></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex space-x-3">
+          <%= link_to edit_notebook_path(@notebook), 
+              class: "inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors",
+              title: "Editar informações do notebook" do %>
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Editar
+          <% end %>
+          
+          <% if @notebook.pode_ser_excluido? %>
+            <%= link_to notebook_path(@notebook), 
+                data: { 
+                  turbo_method: :delete,
+                  turbo_confirm: 'Tem certeza que deseja excluir este notebook? Esta ação não pode ser desfeita.'
+                }, 
+                class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors",
+                title: "Excluir notebook (apenas se nunca foi emprestado)" do %>
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+              Excluir
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <% if flash[:alert] %>
+      <div class="mb-6">
+        <div class="bg-red-50 border border-red-200 rounded-md p-4 flex items-center">
+          <svg class="h-6 w-6 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-1.414-1.414A9 9 0 105.636 18.364l1.414 1.414A9 9 0 1018.364 5.636z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01" />
+          </svg>
+          <span class="text-red-800 text-sm font-medium"><%= flash[:alert] %></span>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Notebook Details -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center mb-6">
+              <svg class="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Informações do Notebook</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <!-- Identificação -->
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                  <svg class="h-4 w-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                  </svg>
+                  Identificação
+                </h4>
+                <dl class="space-y-2">
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">ID do Equipamento</dt>
+                    <dd class="mt-1 text-sm font-mono font-medium text-gray-900"><%= @notebook.identificacao_equipamento %></dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nº Patrimônio</dt>
+                    <dd class="mt-1 text-sm font-mono font-medium text-gray-900"><%= @notebook.numero_patrimonio %></dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nº Série</dt>
+                    <dd class="mt-1 text-sm font-mono font-medium text-gray-900"><%= @notebook.numero_serie %></dd>
+                  </div>
+                </dl>
+              </div>
+
+              <!-- Especificações -->
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                  <svg class="h-4 w-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                  Especificações
+                </h4>
+                <dl class="space-y-2">
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Marca</dt>
+                    <dd class="mt-1 text-sm font-medium text-gray-900"><%= @notebook.marca %></dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Modelo</dt>
+                    <dd class="mt-1 text-sm font-medium text-gray-900"><%= @notebook.modelo %></dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Data de Compra</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                      <svg class="h-4 w-4 inline mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      <%= @notebook.data_compra&.strftime("%d/%m/%Y") %>
+                    </dd>
+                  </div>
+                  <% if @notebook.data_fabricacao %>
+                    <div>
+                      <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Data de Fabricação</dt>
+                      <dd class="mt-1 text-sm text-gray-900">
+                        <svg class="h-4 w-4 inline mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <%= @notebook.data_fabricacao.strftime("%d/%m/%Y") %>
+                      </dd>
+                    </div>
+                  <% end %>
+                </dl>
+              </div>
+            </div>
+
+            <% if @notebook.descricao.present? %>
+              <div class="mt-6 bg-gray-50 rounded-lg p-4">
+                <h4 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                  <svg class="h-4 w-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                  </svg>
+                  Descrição
+                </h4>
+                <p class="text-sm text-gray-900 leading-relaxed"><%= @notebook.descricao %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Current Loan Status -->
+        <% if @notebook.emprestado? && @notebook.emprestimo_atual %>
+          <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <div class="flex items-center mb-6">
+                <svg class="h-6 w-6 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Empréstimo Atual</h3>
+              </div>
+              
+              <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-6">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0">
+                    <div class="h-12 w-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                      <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="text-lg font-semibold text-yellow-800">
+                          <%= @notebook.emprestimo_atual.nome_colaborador %>
+                        </h4>
+                        <p class="text-sm text-yellow-700">
+                          <svg class="h-4 w-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                          </svg>
+                          Setor: <span class="font-medium"><%= @notebook.emprestimo_atual.setor %></span>
+                        </p>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-sm text-yellow-700">
+                          <svg class="h-4 w-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                          </svg>
+                          Emprestado em
+                        </div>
+                        <div class="text-lg font-semibold text-yellow-800">
+                          <%= @notebook.emprestimo_atual.data_emprestimo.strftime("%d/%m/%Y") %>
+                        </div>
+                        <div class="text-xs text-yellow-600">
+                          Há <%= ((Date.current - @notebook.emprestimo_atual.data_emprestimo).to_i) %> dia<%= 's' if ((Date.current - @notebook.emprestimo_atual.data_emprestimo).to_i) != 1 %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Loan History -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Histórico de Empréstimos</h3>
+            <% if @emprestimos.any? %>
+              <div class="flow-root">
+                <ul class="-mb-8">
+                  <% @emprestimos.each_with_index do |emprestimo, index| %>
+                    <li>
+                      <div class="relative pb-8">
+                        <% unless index == @emprestimos.length - 1 %>
+                          <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                        <% end %>
+                        <div class="relative flex space-x-3">
+                          <div>
+                            <span class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
+                              <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                            <div>
+                              <p class="text-sm text-gray-500">
+                                Emprestado para <span class="font-medium text-gray-900"><%= emprestimo.nome_colaborador %></span>
+                                do setor <span class="font-medium text-gray-900"><%= emprestimo.setor %></span>
+                              </p>
+                              <% if emprestimo.motivo_devolucao.present? %>
+                                <p class="text-sm text-gray-500 mt-1">
+                                  <strong>Motivo da Devolução:</strong> <%= emprestimo.motivo_devolucao %>
+                                </p>
+                              <% end %>
+                            </div>
+                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                              <time datetime="<%= emprestimo.data_emprestimo.iso8601 %>">
+                                <%= emprestimo.data_emprestimo.strftime("%d/%m/%Y") %>
+                              </time>
+                              <% if emprestimo.data_devolucao %>
+                                <br>
+                                <time datetime="<%= emprestimo.data_devolucao.iso8601 %>">
+                                  Devolvido em <%= emprestimo.data_devolucao.strftime("%d/%m/%Y") %>
+                                </time>
+                              <% end %>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% else %>
+              <p class="text-gray-500 text-center py-4">Nenhum empréstimo registrado.</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Actions -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center mb-6">
+              <svg class="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Ações Rápidas</h3>
+            </div>
+            
+            <div class="space-y-4">
+              <% if @notebook.disponivel? %>
+                <%= link_to emprestar_notebook_path(@notebook), 
+                    class: "w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-105",
+                    title: "Emprestar este notebook para um colaborador" do %>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                  Emprestar Notebook
+                <% end %>
+              <% elsif @notebook.emprestado? %>
+                <%= link_to devolver_notebook_path(@notebook), 
+                    class: "w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-700 hover:to-yellow-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-200 transform hover:scale-105",
+                    title: "Devolver este notebook ao estoque" do %>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                  </svg>
+                  Devolver Notebook
+                <% end %>
+                
+                <%= link_to baixar_notebook_path(@notebook), 
+                    class: "w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 transform hover:scale-105",
+                    title: "Baixar este notebook (defeito, obsolescência, etc.)" do %>
+                  <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                  Baixar Notebook
+                <% end %>
+              <% else %>
+                <div class="text-center py-4">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <p class="mt-2 text-sm text-gray-500">Notebook indisponível</p>
+                  <p class="text-xs text-gray-400">Nenhuma ação disponível</p>
+                </div>
+              <% end %>
+            </div>
+            
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <h4 class="text-sm font-medium text-gray-700 mb-3">Outras Ações</h4>
+              <div class="space-y-2">
+                <%= link_to edit_notebook_path(@notebook), 
+                    class: "w-full inline-flex justify-center items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors",
+                    title: "Editar informações do notebook" do %>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                  Editar Informações
+                <% end %>
+                
+                <%= link_to notebooks_path, 
+                    class: "w-full inline-flex justify-center items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors",
+                    title: "Voltar para a lista de notebooks" do %>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                  Voltar à Lista
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status History -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Histórico de Estados</h3>
+            <% if @historico_status.any? %>
+              <div class="flow-root">
+                <ul class="-mb-8">
+                  <% @historico_status.each_with_index do |historico, index| %>
+                    <li>
+                      <div class="relative pb-8">
+                        <% unless index == @historico_status.length - 1 %>
+                          <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
+                        <% end %>
+                        <div class="relative flex space-x-3">
+                          <div>
+                            <span class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white">
+                              <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                            <div>
+                              <p class="text-sm text-gray-500">
+                                Estado alterado para 
+                                <span class="font-medium text-gray-900">
+                                  <%= historico.texto_estado %>
+                                </span>
+                              </p>
+                              <% if historico.informacoes_adicionais.present? %>
+                                <p class="text-sm text-gray-500 mt-1">
+                                  <%= historico.informacoes_adicionais %>
+                                </p>
+                              <% end %>
+                            </div>
+                            <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                              <time datetime="<%= historico.data_alteracao.iso8601 %>">
+                                <%= historico.data_alteracao.strftime("%d/%m/%Y %H:%M") %>
+                              </time>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% else %>
+              <p class="text-gray-500 text-center py-4">Nenhum histórico registrado.</p>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Invoice PDF -->
+        <% if @notebook.nota_fiscal_pdf.attached? %>
+          <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Nota Fiscal</h3>
+              <div class="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                <div class="text-center">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  <div class="mt-2">
+                    <%= link_to rails_blob_path(@notebook.nota_fiscal_pdf, disposition: "attachment"), class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" do %>
+                      Baixar Nota Fiscal
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
